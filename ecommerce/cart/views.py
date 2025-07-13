@@ -7,9 +7,9 @@ from django.views import View
 from cart.models import Cart
 from shop.models import Product
 
-
-
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+@method_decorator(login_required,name='dispatch')
 class AddCartView(View):
     def get(self,request,i):
         u=request.user
@@ -25,6 +25,9 @@ class AddCartView(View):
         return redirect('cart:cartview')
 
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+@method_decorator(login_required,name='dispatch')
 class CartView(View):
     def get(self,request):
         u=request.user

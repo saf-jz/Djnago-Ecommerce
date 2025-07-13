@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
+from django.utils.decorators import method_decorator
 
 from django.views.generic import View
 
@@ -97,6 +99,9 @@ class SigninView(View):
 
 
 from django.contrib.auth import logout
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+@method_decorator(login_required,name='dispatch')
 class SignoutView(View):
     def get(self,request):
         logout(request)
@@ -105,6 +110,10 @@ class SignoutView(View):
 
 from shop.forms import CategoryForm,ProductForm
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required,user_passes_test
+@method_decorator(login_required,name='dispatch')
+@method_decorator(user_passes_test(lambda u:u.is_superuser),name='dispatch')
 class AddCategoryView(View):
     def get(self,request):
         form_instance=CategoryForm()
@@ -119,6 +128,10 @@ class AddCategoryView(View):
             form_instance=CategoryForm() #if we need new form instead of the filled data form
             return render(request,'addcategory.html',{'form':form_instance})
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required,user_passes_test
+@method_decorator(login_required,name='dispatch')
+@method_decorator(user_passes_test(lambda u:u.is_superuser),name='dispatch')
 class AddProductView(View):
     def get(self,request):
         form_instance=ProductForm()
